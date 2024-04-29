@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Structural Decay</title>
+    <script src="https://kit.fontawesome.com/8f1f53b08b.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://use.typekit.net/plg4ufk.css">
+    <link rel="stylesheet" href="Styles/styles.css">
+</head>
+<body>
+    <div id="gallery"></div>
+    <div id="lightbox" class="hidden">
+        <button id="close-btn">
+            <i class="fa-solid fa-xmark"></i>
+        </button>
+        <button id="prev-btn">
+            <i class="fa-solid fa-angles-left"></i>
+        </button>
+        <button id="next-btn">
+            <i class="fa-solid fa-angles-right"></i>
+        </button>
+        <img src="" alt="" id="lightbox-img">
+    </div>
+    <div id="liked-images" class="hidden">
+        <button id="toggle-liked">
+            <i class="fa-solid fa-heart"></i>
+        </button>
+        <div id="liked-list"></div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" integrity="sha512-7eHRwcbYkK4d9g/6tD/mhkf++eoTHwpNM9woBxtPUBWm67zeAfFC+HrdoE2GanKeocly/VxeLvIqwvCdk7qScg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" integrity="sha512-onMTRKJBKz8M1TnqqDuGBlowlH0ohFzMXYRNebz+yOcc5TQr/zAKsthzhuv0hiyUKEiQEQXEynnXCvNTOk50dg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="code.js"></script>
+</body>
+</html>

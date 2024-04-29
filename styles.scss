@@ -1,0 +1,96 @@
+@import url("https://use.typekit.net/plg4ufk.css");
+
+$neueKabelFont: 'neue-kabel', sans-serif;
+
+@mixin flex($direction, $justify, $align) {
+    display: flex;
+    flex-direction: $direction;
+    justify-content: $justify;
+    align-items: $align;
+}
+
+body, html {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    @include flex(row, center, center);
+    font-family: $neueKabelFont;
+}
+
+#gallery {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    gap: 10px;
+    width: 80%;
+    margin: auto;
+    img {
+        width: 100%;
+        height: auto;
+        cursor: pointer;
+        transition: transform 0.3s ease;
+        &:hover {
+            transform: scale(1.1);
+        }
+    }
+}
+
+#lightbox {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    @include flex(column, center, center);
+    &.hidden {
+        display: none;
+    }
+    img {
+        max-width: 90%;
+        max-height: 80%;
+    }
+    #close-btn,
+    #prev-btn,
+    #next-btn {
+        background: none;
+        border: none;
+        color: #fff;
+        font-size: 2rem;
+        cursor: pointer;
+        position: absolute;
+    }
+    #close-btn {
+        top: 5px;
+        right: 5px;
+    }
+    #prev-btn {
+        top: 45%;
+        left: 5px;
+    }
+    #next-btn {
+        top: 45%;
+        left: 5px;
+    }
+}
+
+#liked-images {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    background: #fff;
+    width: 100px;
+    height: auto;
+    border: 1px solid #fff;
+    padding: 10px;
+    &.hidden {
+        display: none;
+    }
+    #toggle-liked {
+        background: none;
+        border: none;
+        color: red;
+        font-size: 1.5rem;
+        cursor: pointer;
+    }
+}
