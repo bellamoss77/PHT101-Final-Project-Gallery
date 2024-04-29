@@ -623,7 +623,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const prevBtn = document.getElementById('prev-btn');
     const likedImages = document.getElementById('liked-images');
     const likedList = document.getElementById('liked-list');
-    const toggleLiked = document.getElementById('toggle-like');
+    const toggleLike = document.getElementById('toggle-like');
 
     let currentIndex = 0;
     let liked = [];
@@ -634,6 +634,16 @@ document.addEventListener('DOMContentLoaded', function () {
         imageElement.alt = img.alt;
         imageElement.caption = img.caption;
         imageElement.subCaption = img.subCaption;
+        const likeButton = document.createElement('button');
+        likeButton.innerHTML = `<i class="fa-solid fa-heart"></i>`;
+        likeButton.classList.add('like-btn');
+        likeButton.addEventListener('click', () => {
+            toggleLiked(index);
+        });
+        const imageContainer = document.createElement('div');
+        imageContainer.appendChild(imageElement);
+        imageContainer.appendChild(likeButton);
+        gallery.appendChild(imageContainer);
 
         imageElement.addEventListener('click', () => {
             currentIndex = index;
@@ -642,15 +652,65 @@ document.addEventListener('DOMContentLoaded', function () {
         gallery.appendChild(imageElement);
     });
 
+    function toggleLiked(index) {
+        const likedIndex = liked.indexOf(index);
+        if (likedIndex === -1) {
+            liked.push(index);
+        } else {
+            liked.splice(likedIndex, 1);
+        };
+        updateLikedImages();
+    };
+
+    function updateLikedImages() {
+        likedList.innerHTML = '';
+        liked.forEach((index) => {
+            const image = images[index];
+            const likedItem = document.createElement('div');
+            likedItem.textContent = `${image.caption} - ${image.subCaption}`;
+            likedList.appendChild(likedItem);
+        });
+    }
+
     function openLightbox() {
+        if (animationInProgress) return;
+        animationInProgress = true;
+
+        const image = images[currentIndex];
         lightbox.classList.remove('hidden');
-        lightboxImg.src = images[currentIndex].src;
-        gsap.fromTo(lightboxImg, { opacity: 0 }, { opacity: 1, duration: 0.5, ease: 'power2.inOut' });
+        lightboxImg.src = image.src;
+        lightboxImg.alt = image.alt;
+        document.getElementById('lightbox-caption').textContent = image.caption;
+        document.getElementById('lightbox-subcaption').textContent = image.subCaption;
+        gsap.fromTo(lightboxImg, { opacity: 0 }, { 
+            opacity: 1, 
+            duration: 0.5, 
+            ease: 'power2.inOut',
+            onComplete: function() {
+                animationInProgress = false;
+            } 
+        });
     }
 
     closeBtn.addEventListener('click', () => {
         lightbox.classList.add('hidden');
     });
+
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' || e.code === 'Escape') {
+            lightbox.classList.add('hidden');
+        }
+    })
+
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowLeft') {
+            currentIndex = (currentIndex - 1 + images.length) % images.length;
+            openLightbox();
+        } else if (e.key === 'ArrowRight') {
+            currentIndex = (currentIndex + 1) % images.length;
+            openLightbox();
+        }
+    })
     nextBtn.addEventListener('click', () => {
         currentIndex = (currentIndex + 1) % images.length;
         openLightbox();
