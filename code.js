@@ -1,4 +1,4 @@
-document.addEventListener('DOMContentLoaded', function () {
+document.addEventListener('DOMContentLoaded', function() {
     const images = [
         {
             src: 'https://github.com/bellamoss77/PHT101-Final-Project-Gallery/blob/main/images/abandoned-hotel_1.png?raw=true',
@@ -715,94 +715,159 @@ document.addEventListener('DOMContentLoaded', function () {
             category: 'Abandoned Family Home',
             id: '102'
         }
-    ];
+        ];
+    
+    const gallery = document.getElementById('imageGalleryContainer');
+    const likedDropdownList = document.getElementById('likedDropdownList');
+    let currentImageIndex = 0;
 
-    const createGalleryWithLikeBtns = (images) => {
-        const gallery = document.getElementById('imageGalleryContainer');
-
-        images.forEach(image => {
-            const imageSlide = document.createElement('div');
-            imageSlide.classList.add('slide-img');
-
-            const imgElement = document.createElement('img');
-            imgElement.src = image.src;
-            imgElement.alt = image.alt;
-            imgElement.caption = image.caption;
-            imgElement.subCaption = image.subCaption;
-
-            const likeBtn = document.createElement('button');
-            likeBtn.innerHTML = `<svg id="MERGED_ICON" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 46.26 41" width="2rem" height="2rem">
-            <defs>
-              <style>
-                .cls-1 {
-                  stroke-width: 0px;
-                }
-          
-                .cls-1, .cls-2 {
-                  fill: rgba(255, 255, 255, 0.5);
-                }
-          
-                .cls-2, .cls-3, .cls-4 {
-                  stroke-miterlimit: 10;
-                }
-          
-                .cls-2, .cls-4 {
-                  stroke: rgba(255, 255, 255, 0.5);
-                  stroke-width: 2px;
-                }
-          
-                .cls-3 {
-                  stroke: rgba(255, 255, 255, 0.5);
-                  stroke-width: 4px;
-                }
-          
-                .cls-3, .cls-4 {
-                  fill: none;
-                }
-              </style>
-            </defs>
-            <path id="IMAGE" class="cls-4" d="M23.43,11.19c10.17,0,9.49-1.75,9.49,9.1s1.13,9.68-9.44,9.68-9.54,1.43-9.54-11.15c0-8.8,1.12-7.63,9.49-7.63Z"/>
-            <path id="IMG-MOUNTAINS" class="cls-2" d="M14.91,26.25c3.91-5.28,3.91-6.85,6.07-2.74,3.13-3.52,3.13-7.41,7.04-2.33s4.78,6.51,4.78,6.51c0,0-.72,1.15-9.37,1.3s-8.51-2.74-8.51-2.74Z"/>
-            <g id="IMG-SUN">
-              <path class="cls-1" d="M19.41,15.1c2.35,0,3.33,3.64,0,3.64s-2.35-3.64,0-3.64Z"/>
-            </g>
-            <path id="HEART" class="cls-3" d="M22.76,8.25C12.57-3.29,2,3.36,2,14.32c0,9.98,20.76,24.26,20.76,24.26,0,0,21.5-14.67,21.5-25.24S30.96-3.29,22.76,8.25Z"/>
-          </svg>`;
-          likeBtn.classList.add('like-btn');
-
-          const svgElement = likeBtn.querySelector('svg');
-
-          setSvgStyle(svgElement, image.liked ? 'active' : 'inactive');
-          const captionContainer = document.createElement('div');
-          captionContainer.classList.add('captionContainer');
-          const caption = document.createElement('h3');
-          caption.classList.add('caption');
-          caption.textContent = `${image.caption}`;
-
-          const subCaption = document.createElement('p');
-          subCaption.classList.add('subCaption');
-          subCaption.textContent = `${image.subCaption}`;
-
-          imageSlide.appendChild(captionContainer);
-          captionContainer.appendChild(caption);
-          captionContainer.appendChild(subCaption);
-
-          likeBtn.addEventListener('click', () => {
-            image.liked = !image.liked;
-            setSvgStyle(svgElement, image.liked ? 'active' : 'inactive');
-            updateLikedImagesDisplay();
-          });
-
-          likeBtn.addEventListener('mouseenter', () => setSvgStyle(svgElement, 'hover'));
-          likeBtn.addEventListener('mouseleave', () => setSvgStyle(svgElement, image.liked ? 'active' : 'inactive'));
-
-          imageSlide.appendChild(imgElement);
-          imageSlide.appendChild(likeBtn);
-          gallery.appendChild(imageSlide);
-        });
+    if (!gallery || !likedDropdownList) {
+        console.error('Gallery or liked-list container not found in the DOM!');
+        return;
     }
 
-    const setSvgStyle = (svg, state) => {
+    document.addEventListener('keydown', (e) => {
+        const lightboxContainer = document.getElementById('lightboxContainer');
+        if (lightboxContainer.style.display === 'block') {
+            if (e.key === 'Escape') {
+                closeLightbox();
+            } else if (e.key === 'ArrowLeft') {
+                currentImageIndex = (currentImageIndex - 1 + images.length) % images.length;
+                openLightbox(currentImageIndex);
+            } else if (e.key === 'ArrowRight') {
+                currentImageIndex = (currentImageIndex + 1) % images.length;
+                openLightbox(currentImageIndex);
+            };
+        }
+        
+    })
+
+    const savedImgsBtn = document.getElementById('savedImgs');
+    
+    function updatedLikedImagesDisplay() {
+        likedDropdownList.innerHTML = '';
+        const likedImages = images.filter(img => img.liked);
+        const likedContainer = document.getElementById('savedContainer');
+        const itemsList = likedDropdownList.querySelector('ol');
+        const arrowSaved = document.getElementById('arrowSaved');
+
+
+        likedImages.forEach(image => {
+            const listItem = document.createElement('li');
+            listItem.textContent = `${image.id} - ${image.caption}`;
+            likedDropdownList.appendChild(listItem);
+        });
+
+        
+        if (likedImages.length > 0) {
+            likedContainer.style.display = 'block';
+            gsap.set(likedDropdownList, { autoAlpha: 0 });
+            gsap.set(arrowSaved, { rotation: 0 });
+        } else {
+            likedContainer.style.display = 'none';
+        }
+    }
+    savedImgsBtn.addEventListener('click', () => {
+        const isVisible = gsap.getProperty(likedDropdownList, 'autoAlpha') > 0;
+    
+        if (isVisible) {
+            gsap.to(likedDropdownList, { duration: 0.3, autoAlpha: 0 });
+            gsap.to(arrowSaved, { duration: 0.3, rotation: 0 });
+        } else {
+            gsap.to(likedDropdownList, {duration: 0.3, autoAlpha: 1, y: 20 });
+            gsap.to(arrowSaved, { duration: 0.3, rotation: 180 });
+        }
+        updatedLikedImagesDisplay()
+    });
+    
+
+    function updateLikeStatus(imageIndex) {
+        const image = images[imageIndex];
+        image.liked = !image.liked;
+
+        document.querySelectorAll('.gallery-image').forEach((imgElement, idx) => {
+            if (idx === imageIndex) {
+                const likeBtn = imgElement.parentNode.querySelector('.like-btn');
+                setSvgStyle(likeBtn.querySelector('svg'), image.liked ? 'active' : 'inactive');
+            }
+        });
+
+        const lightboxImg = document.querySelector('.lightbox-img');
+        if (lightboxImg && lightboxImg.src === image.src) {
+            const likeBtn = document.querySelector('lightbox-content, .like-btn');
+            setSvgStyle(likeBtn.querySelector('svg'), image.liked ? 'active' : 'inactive');
+        }
+        updatedLikedImagesDisplay
+    }
+    
+
+    images.forEach((image, index) => {
+        const imgContent = document.createElement('div');
+        imgContent.classList.add('img-content');
+
+        const imgElement = document.createElement('img');
+        imgElement.src = image.src;
+        imgElement.alt = image.alt;
+        imgElement.classList.add('gallery-image');
+        imgElement.addEventListener('click', () => openLightbox(index));
+        imgContent.appendChild(imgElement);
+
+        const likeBtn = document.createElement('button');
+        likeBtn.innerHTML = `<svg id="MERGED_ICON" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 46.26 41" width="2rem" height="2rem">
+        <defs>
+            <style>
+            .cls-1 {
+                stroke-width: 0px;
+            }
+        
+            .cls-1, .cls-2 {
+                fill: rgba(255, 255, 255, 0.5);
+            }
+        
+            .cls-2, .cls-3, .cls-4 {
+                stroke-miterlimit: 10;
+            }
+        
+            .cls-2, .cls-4 {
+                stroke: rgba(255, 255, 255, 0.5);
+                stroke-width: 2px;
+            }
+        
+            .cls-3 {
+                stroke: rgba(255, 255, 255, 0.5);
+                stroke-width: 4px;
+            }
+        
+            .cls-3, .cls-4 {
+                fill: none;
+            }
+            </style>
+        </defs>
+        <path id="IMAGE" class="cls-4" d="M23.43,11.19c10.17,0,9.49-1.75,9.49,9.1s1.13,9.68-9.44,9.68-9.54,1.43-9.54-11.15c0-8.8,1.12-7.63,9.49-7.63Z"/>
+        <path id="IMG-MOUNTAINS" class="cls-2" d="M14.91,26.25c3.91-5.28,3.91-6.85,6.07-2.74,3.13-3.52,3.13-7.41,7.04-2.33s4.78,6.51,4.78,6.51c0,0-.72,1.15-9.37,1.3s-8.51-2.74-8.51-2.74Z"/>
+        <g id="IMG-SUN">
+            <path class="cls-1" d="M19.41,15.1c2.35,0,3.33,3.64,0,3.64s-2.35-3.64,0-3.64Z"/>
+        </g>
+        <path id="HEART" class="cls-3" d="M22.76,8.25C12.57-3.29,2,3.36,2,14.32c0,9.98,20.76,24.26,20.76,24.26,0,0,21.5-14.67,21.5-25.24S30.96-3.29,22.76,8.25Z"/>
+        </svg>`;
+        likeBtn.classList.add('like-btn');
+
+        const svgElement = likeBtn.querySelector('svg');
+        setSvgStyle(svgElement, image.liked ? 'active' : 'inactive');
+
+        likeBtn.addEventListener('click', (event) => {
+            event.stopPropagation();
+            updateLikeStatus(index);
+        });
+
+        likeBtn.addEventListener('mouseenter', () => setSvgStyle(svgElement, 'hover'));
+        likeBtn.addEventListener('mouseleave', () => setSvgStyle(svgElement, image.liked ? 'active' : 'inactive'));
+
+        imgContent.appendChild(likeBtn);
+        gallery.appendChild(imgContent);
+    });
+
+    function setSvgStyle(svg, state) {
         const cls1 = svg.querySelector('.cls-1');
         const cls2 = svg.querySelector('.cls-2');
         const cls3 = svg.querySelector('.cls-3');
@@ -821,7 +886,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 cls2.style.fill = 'white';
                 cls2.style.stroke = 'white';
                 cls3.style.stroke = 'white';
-                cls4.style.stroke = 'white';
+                cls4.style.stroke = 'white'
                 svg.style.opacity = '1';
                 break;
             case 'inactive':
@@ -830,73 +895,117 @@ document.addEventListener('DOMContentLoaded', function () {
                 cls2.style.fill = 'rgba(255, 255, 255, 0.5)';
                 cls2.style.stroke = 'rgba(255, 255, 255, 0.5)';
                 cls3.style.stroke = 'rgba(255, 255, 255, 0.5)';
-                cls4.style.stroke = 'rgba(255, 255, 255, 0.5)';
+                cls4.style.stroke = 'rgba(255, 255, 255, 0.5)';                
                 break;
         }
     }
 
-    createGalleryWithLikeBtns(images);
+    function openLightbox(index) {
+        currentImageIndex = index;
+        const image = images[index];
+        const lightboxContainer = document.getElementById('lightboxContainer');
+        if (!lightboxContainer) {
+            console.error('Lightbox container not found in DOM!');
+            return;
+        }
 
-    const handleLikeBtnClick = (imageId, svgElement) => {
-        console.log(`Like button clicked for image ID: ${imageId}`);
+        lightboxContainer.innerHTML = '';
+        lightboxContainer.style.display = 'block';
 
-        if (image) {
-            console.log(`Toggling like state for: ${image.caption}`);
-            image.liked = !image.liked;
-            setSvgStyle(svgElement, image.liked ? 'active' : 'inactive');
-            updateLikedImagesDisplay();
+        const lightboxContent = document.createElement('div');
+        lightboxContent.className = 'lightbox-content';
 
-            const likeBtn = document.getElementById('savedImgs');
-            if (likeBtn) {
-                likeBtn.innerHTML = image.liked ? `<i class="fa-solid fa-heart"></i>` : `<i class="fa-regular fa-heart"></i>`;
+        const lightboxImg = document.createElement('img');
+        lightboxImg.className = 'lightbox-img';
+        lightboxImg.src = images[index].src;
+        lightboxImg.alt = images[index].alt;
+        lightboxContent.appendChild(lightboxImg);
+
+        const captionContainer = document.createElement('div');
+        captionContainer.className = 'caption-container';
+
+        const lightboxCaption = document.createElement('h3');
+        lightboxCaption.className = 'lightbox-caption';
+        lightboxCaption.textContent = images[index].caption;
+        captionContainer.appendChild(lightboxCaption);
+
+        const lightboxSubCaption = document.createElement('p');
+        lightboxSubCaption.className = 'lightbox-sub-caption';
+        lightboxSubCaption.textContent = images[index].subCaption;
+        captionContainer.appendChild(lightboxSubCaption);
+
+        lightboxContent.appendChild(captionContainer);
+        lightboxContainer.appendChild(lightboxContent);
+
+        const likeBtn = document.createElement('button');
+        likeBtn.innerHTML = `<svg id="MERGED_ICON" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 46.26 41" width="2rem" height="2rem">
+        <defs>
+            <style>
+            .cls-1 {
+                stroke-width: 0px;
             }
+        
+            .cls-1, .cls-2 {
+                fill: rgba(255, 255, 255, 0.5);
+            }
+        
+            .cls-2, .cls-3, .cls-4 {
+                stroke-miterlimit: 10;
+            }
+        
+            .cls-2, .cls-4 {
+                stroke: rgba(255, 255, 255, 0.5);
+                stroke-width: 2px;
+            }
+        
+            .cls-3 {
+                stroke: rgba(255, 255, 255, 0.5);
+                stroke-width: 4px;
+            }
+        
+            .cls-3, .cls-4 {
+                fill: none;
+            }
+            </style>
+        </defs>
+        <path id="IMAGE" class="cls-4" d="M23.43,11.19c10.17,0,9.49-1.75,9.49,9.1s1.13,9.68-9.44,9.68-9.54,1.43-9.54-11.15c0-8.8,1.12-7.63,9.49-7.63Z"/>
+        <path id="IMG-MOUNTAINS" class="cls-2" d="M14.91,26.25c3.91-5.28,3.91-6.85,6.07-2.74,3.13-3.52,3.13-7.41,7.04-2.33s4.78,6.51,4.78,6.51c0,0-.72,1.15-9.37,1.3s-8.51-2.74-8.51-2.74Z"/>
+        <g id="IMG-SUN">
+            <path class="cls-1" d="M19.41,15.1c2.35,0,3.33,3.64,0,3.64s-2.35-3.64,0-3.64Z"/>
+        </g>
+        <path id="HEART" class="cls-3" d="M22.76,8.25C12.57-3.29,2,3.36,2,14.32c0,9.98,20.76,24.26,20.76,24.26,0,0,21.5-14.67,21.5-25.24S30.96-3.29,22.76,8.25Z"/>
+        </svg>`;
+        likeBtn.classList.add('like-btn');
+
+        const svgElement = likeBtn.querySelector('svg');
+        setSvgStyle(svgElement, image.liked ? 'active' : 'inactive');
+
+        likeBtn.addEventListener('click', (event) => {
+            event.stopPropagation();
+            updateLikeStatus(currentImageIndex);
+        });
+
+        likeBtn.addEventListener('mouseenter', () => setSvgStyle(svgElement, 'hover'));
+        likeBtn.addEventListener('mouseleave', () => setSvgStyle(svgElement, image.liked ? 'active' : 'inactive'));
+
+        lightboxContent.appendChild(likeBtn);
+        
+
+        const closeBtn = document.createElement('button');
+        closeBtn.innerHTML = `<i class="fa-solid fa-xmark"></i>`;
+        closeBtn.className = 'lightbox-close';
+        closeBtn.onclick = () => {
+            lightboxContainer.style.display = 'none';
+        };
+        
+        lightboxContent.appendChild(closeBtn);
+    }
+
+    function closeLightbox() {
+        const lightboxContainer = document.getElementById('lightboxContainer');
+        if (lightboxContainer && lightboxContainer.style.display === 'block') {
+            lightboxContainer.style.display = 'none';
         }
     }
 
-    const updateLikedImagesDisplay = () => {
-        console.log('Updating display...');
-        const likedImages = images.filter(image => image.liked);
-        console.log(`Found ${likedImages.length} liked images.`);
-        const likedImgContainer = document.getElementById('savedContainer');
-        const likedDropdownList = document.getElementById('likedDropdownList');
-        const itemsList = likedDropdownList.querySelector('ol');
-        const savedImgsBtn = document.getElementById('savedImgs');
-        const arrowSaved = document.getElementById('arrowSaved');
-
-        itemsList.innerHTML = '';
-
-        likedImages.forEach(image => {
-            console.log(`Adding to display: ${image.caption}`);
-            const listItem = document.createElement('li');
-            listItem.textContent = image.caption;
-            listItem.textContent += image.subCaption;
-            itemsList.appendChild(listItem);
-        });
-
-        if (likedImages.length > 0) {
-            likedImgContainer.style.display = 'block';
-            gsap.set(likedDropdownList, { autoAlpha: 0 });
-            gsap.set(arrowSaved, { rotation: 0 });
-        } else {
-            likedImgContainer.style.display = 'none';
-        }
-
-        savedImgsBtn.addEventListener('click', () => {
-            const isVisible = gsap.getProperty(likedDropdownList, 'autoAlpha') > 0;
-
-            if (isVisible) {
-                gsap.to(likedDropdownList, { duration: 0.3, autoAlpha: 0 });
-                gsap.to(arrowSaved, { duration: 0.3, rotation: 0 });
-            } else {
-                gsap.to(likedDropdownList, { duration: 0.3, autoAlpha: 1, y: 20 });
-                gsap.to(arrowSaved, { duration: 0.3, rotation: 180 });
-            }
-        });
-
-        const isListVisible = likedDropdownList.style.display === 'block';
-        likedDropdownList.style.display = isListVisible ? 'none' : 'block';
-
-        likedDropdownList.style.display = likedImages.length > 0 ? 'block' : 'none';
-    }
-    updateLikedImagesDisplay();
-});
+});  
