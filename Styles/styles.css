@@ -29,6 +29,7 @@ body, html {
   justify-content: center;
   align-items: center;
   font-family: "neue-kabel", sans-serif;
+  background-color: rgb(122, 30, 182);
 }
 
 #savedContainer {
@@ -39,6 +40,11 @@ body, html {
   height: 5%;
   z-index: 1000;
 }
+#savedContainer.visible {
+  display: block;
+  opacity: 1;
+  visibility: visible;
+}
 #savedContainer #savedImgs {
   z-index: 1000;
   background-color: #e4c1fb;
@@ -47,8 +53,7 @@ body, html {
   flex-direction: row;
   justify-content: flex-start;
   align-items: center;
-  -moz-column-gap: 0.5rem;
-       column-gap: 0.5rem;
+  column-gap: 0.5rem;
   cursor: pointer;
   border: 5px;
   border: none;
@@ -85,13 +90,24 @@ body, html {
   transition: all 0.1s cubic-bezier(0.16, 1, 0.5, 1);
   transform: translateY(0.5rem);
 }
-#savedContainer #likedDropdownList li {
+#savedContainer #likedDropdownList ol {
+  padding: 25px;
+  display: none;
+  opacity: 0;
+  transform: translateY(-20px);
+  transition: all 0.3s;
+}
+#savedContainer #likedDropdownList ol.visible {
+  display: block;
+  opacity: 1;
+  transform: translateY(0px);
+}
+#savedContainer #likedDropdownList ol li {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  -moz-column-gap: 0.5rem;
-       column-gap: 0.5rem;
+  column-gap: 0.5rem;
   padding: 0.8rem 1rem;
   text-decoration: none;
   font-weight: 400;
@@ -103,13 +119,27 @@ body, html {
   flex-direction: row;
   justify-content: center;
   align-items: center;
-  height: 35vh;
+  height: 100vh;
   width: 100vw;
   font-size: 5rem;
   font-weight: 600;
   text-align: center;
   color: #ddd;
   margin-bottom: 25vh;
+}
+
+.vector-container {
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+.vector-container .decrepit-vector {
+  width: 90vw;
+  height: auto;
+  padding-bottom: 50vh;
 }
 
 #imageGalleryContainer {
@@ -119,8 +149,7 @@ body, html {
   flex-direction: row;
   justify-content: center;
   align-items: center;
-  -moz-column-gap: 0.5rem;
-       column-gap: 0.5rem;
+  column-gap: 0.5rem;
   row-gap: 0.5rem;
   flex-wrap: wrap;
 }

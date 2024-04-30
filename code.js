@@ -1,9 +1,88 @@
 document.addEventListener('DOMContentLoaded', function() {
+    gsap.registerPlugin(ScrollTrigger);
+
+    gsap.from('#galleryTitle', {
+        duration: 1,
+        autoAlpha: 0,
+        ease: 'power2.inOut'
+    });
+
+    ScrollTrigger.create({
+        trigger: '#galleryTitle',
+        start: 'top top',
+        end: 'bottom 30%',
+        markers: true,
+        onEnter: () => {
+            gsap.to('#galleryTitle h1', {
+                duration: 1,
+                fontSize: '2rem',
+                top: '10px',
+                left: '10px',
+                position: 'fixed'
+            });
+        },
+        onLeaveBack: () => {
+            gsap.to('#galleryTitle h1', {
+                duration: 1,
+                fontSize: '5rem',
+                top: '50%',
+                left: '50%',
+                position: 'absolute'
+            });
+        }
+    });
+
+    const explanationLines = document.querySelectorAll('.explanation-text p');
+    explanationLines.forEach((line, index) => {
+        gsap.fromTo(line, 
+        { autoAlpha: 0 },
+        { 
+            duration: 1,
+            autoAlpha: 1,
+            scrollTrigger: {
+                trigger: line,
+                start: 'top center += 100',
+                end: 'bottom-top',
+                scrub: true,
+                markers: true, 
+                toggleActions: 'play none none reverse'
+            }
+          }
+        );
+    });
+
+    ScrollTrigger.create({
+        trigger: '.vector-container',
+        start: 'top center',
+        end: 'bottom 30%',
+        scrub: true,
+        markers: true,
+        onEnter: () => {
+            gsap.to('.vector-container img', {
+                duration: 1,
+                width: '100px', 
+                position: 'fixed',
+                top: '10px',
+                left: '50%',
+                transform: 'translateX(-50%)'
+            });
+        },
+        onLeaveBack: () => {
+            gsap.to('.vector-container img', {
+                duration: 1,
+                width: '90vw',
+                position: 'absolute',
+                top: '50%',
+                left: '50%',
+                transform: 'translate(-50%, -50%)'
+            });
+        }
+    });
     const images = [
         {
             src: 'https://github.com/bellamoss77/PHT101-Final-Project-Gallery/blob/main/images/abandoned-hotel_1.png?raw=true',
             alt: 'door abandoned hotel',
-            caption: 'Missing Door from Dilapidated Hotel Building',
+            caption: 'Doorway Abyss',
             subCaption: 'The Inn at Afton, April 2024',
             category: 'Abandoned Hotel',
             id: '1'
@@ -724,6 +803,8 @@ document.addEventListener('DOMContentLoaded', function() {
     if (!gallery || !likedDropdownList) {
         console.error('Gallery or liked-list container not found in the DOM!');
         return;
+    } else {
+        console.log('Gallery and Liked List initialized correctly.');
     }
 
     document.addEventListener('keydown', (e) => {
@@ -743,45 +824,65 @@ document.addEventListener('DOMContentLoaded', function() {
     })
 
     const savedImgsBtn = document.getElementById('savedImgs');
+    const likedContainer = document.getElementById('savedContainer');
+    const itemsList = likedDropdownList.querySelector('ol');
     
     function updatedLikedImagesDisplay() {
-        likedDropdownList.innerHTML = '';
-        const likedImages = images.filter(img => img.liked);
-        const likedContainer = document.getElementById('savedContainer');
-        const itemsList = likedDropdownList.querySelector('ol');
-        const arrowSaved = document.getElementById('arrowSaved');
+        console.log('Updating liked images display.');
+        if (!itemsList) {
+            console.error('Items list not found!');
+        }
+        itemsList.innerHTML = '';
 
-
+        const likedImages = images.filter(img => img.liked)
+        console.log(`Liked images count: ${likedImages.length}`);
         likedImages.forEach(image => {
             const listItem = document.createElement('li');
             listItem.textContent = `${image.id} - ${image.caption}`;
-            likedDropdownList.appendChild(listItem);
+            itemsList.appendChild(listItem);
         });
 
         
         if (likedImages.length > 0) {
             likedContainer.style.display = 'block';
-            gsap.set(likedDropdownList, { autoAlpha: 0 });
+            likedContainer.style.visibility = 'visible'
+            gsap.set(itemsList, { autoAlpha: 0 });
             gsap.set(arrowSaved, { rotation: 0 });
         } else {
             likedContainer.style.display = 'none';
         }
     }
     savedImgsBtn.addEventListener('click', () => {
-        const isVisible = gsap.getProperty(likedDropdownList, 'autoAlpha') > 0;
+        const isVisible = likedDropdownList.classList.contains('visible');
+        console.log(`Dropdown visible: ${isVisible}`);
     
         if (isVisible) {
-            gsap.to(likedDropdownList, { duration: 0.3, autoAlpha: 0 });
-            gsap.to(arrowSaved, { duration: 0.3, rotation: 0 });
+            console.log('Hiding dropdown list.');
+            gsap.to(likedDropdownList, { autoAlpha: 0, duration: 0.3, ease: 'power2.inOut', onComplete: () => {
+                likedDropdownList.style.visibility = 'hidden';
+                likedDropdownList.classList.remove('visible');
+                itemsList.style.opacity = 0;
+                itemsList.style.visibility = 'hidden'
+            } });
+            gsap.to(arrowSaved, { duration: 0.3, rotation: 0, ease: 'power2.inOut' });
         } else {
-            gsap.to(likedDropdownList, {duration: 0.3, autoAlpha: 1, y: 20 });
-            gsap.to(arrowSaved, { duration: 0.3, rotation: 180 });
+            console.log('Showing dropdown list.');
+            likedDropdownList.style.visibility = 'visible';
+            likedDropdownList.style.display = 'block';
+            likedDropdownList.classList.add('visible');
+            gsap.to(likedDropdownList, { autoAlpha: 1, opacity: 1, duration: 0.3, ease: 'power2.inOut', onStart: () => {
+                itemsList.style.opacity = '1';
+                itemsList.style.visibility = 'visible';
+                itemsList.style.display = 'block'
+            } })
+            gsap.to(arrowSaved, { duration: 0.3, rotation: 180, ease: 'power2.inOut' })
         }
         updatedLikedImagesDisplay()
     });
     
 
     function updateLikeStatus(imageIndex) {
+        console.log(`Toggling like status for image index: ${imageIndex}`);
         const image = images[imageIndex];
         image.liked = !image.liked;
 
@@ -791,6 +892,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 setSvgStyle(likeBtn.querySelector('svg'), image.liked ? 'active' : 'inactive');
             }
         });
+        updatedLikedImagesDisplay();
 
         const lightboxImg = document.querySelector('.lightbox-img');
         if (lightboxImg && lightboxImg.src === image.src) {
