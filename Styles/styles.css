@@ -29,7 +29,7 @@ body, html {
   justify-content: center;
   align-items: center;
   font-family: "neue-kabel", sans-serif;
-  background-color: rgb(122, 30, 182);
+  background-color: rgb(54, 3, 88);
   overflow-x: hidden;
 }
 
@@ -54,8 +54,7 @@ body, html {
   flex-direction: row;
   justify-content: flex-start;
   align-items: center;
-  -moz-column-gap: 0.5rem;
-       column-gap: 0.5rem;
+  column-gap: 0.5rem;
   cursor: pointer;
   border: 5px;
   border: none;
@@ -87,7 +86,7 @@ body, html {
   width: 250px;
   box-shadow: rgba(0, 0, 0, 0.5) 0px 6px 10px 0px, rgba(0, 0, 0, 0.1) 0px 0px 0px 1px;
   border-radius: 5px;
-  background: rgb(122, 30, 182);
+  background: rgb(54, 3, 88);
   display: none;
   transition: all 0.1s cubic-bezier(0.16, 1, 0.5, 1);
   transform: translateY(0.5rem);
@@ -109,8 +108,7 @@ body, html {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  -moz-column-gap: 0.5rem;
-       column-gap: 0.5rem;
+  column-gap: 0.5rem;
   padding: 0.8rem 1rem;
   text-decoration: none;
   font-weight: 400;
@@ -170,8 +168,7 @@ body, html {
   flex-direction: row;
   justify-content: center;
   align-items: center;
-  -moz-column-gap: 0.5rem;
-       column-gap: 0.5rem;
+  column-gap: 0.5rem;
   row-gap: 0.5rem;
   flex-wrap: wrap;
 }

@@ -89,26 +89,6 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    gsap.from('#imageGalleryContainer', { autoAlpha: 0, opacity: 0, duration: 2, ease: 'power2.inOut' });
-
-    ScrollTrigger.create({
-        trigger: '#imageGalleryContainer',
-        start: 'top center',
-        end: 'bottom bottom',
-        scrub: true,
-        pin: '.pin',
-        markers: true,
-        onEnter: () => {
-            gsap.to('#imageGalleryContainer', {
-                autoAlpha: 1,
-                opacity: 1,
-                duration: 3,
-                ease: 'power2.inOut',
-                toggleActions: 'play reverse play reverse'
-            });
-        },
-    });
-
 
     const images = [
         {
@@ -1049,6 +1029,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const lightboxContent = document.createElement('div');
         lightboxContent.className = 'lightbox-content';
 
+
         const lightboxImg = document.createElement('img');
         lightboxImg.className = 'lightbox-img';
         lightboxImg.src = images[index].src;
@@ -1154,6 +1135,12 @@ document.addEventListener('DOMContentLoaded', function() {
         };
         
         lightboxContent.appendChild(closeBtn);
+    }
+
+    function updateLightboxContent(container, image) {
+        container.innerHTML = '';
+
+        
     }
 
     function closeLightbox() {
