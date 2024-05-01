@@ -9,25 +9,28 @@ document.addEventListener('DOMContentLoaded', function() {
 
     ScrollTrigger.create({
         trigger: '#galleryTitle',
-        start: 'top top',
-        end: 'bottom 30%',
-        markers: true,
+        start: '+=300',
+        end: '+=1000',
+        markers: false,
+        scrub: true,
         onEnter: () => {
             gsap.to('#galleryTitle h1', {
-                duration: 1,
-                fontSize: '2rem',
+                duration: 2,
+                fontSize: '1.2rem',
                 top: '10px',
                 left: '10px',
-                position: 'fixed'
+                position: 'fixed',
+                toggleActions: 'play reverse play reverse'
             });
         },
-        onLeaveBack: () => {
+        onLeaveBack: (self) => {
             gsap.to('#galleryTitle h1', {
                 duration: 1,
                 fontSize: '5rem',
                 top: '50%',
                 left: '50%',
-                position: 'absolute'
+                position: 'absolute',
+                clearProps: 'top,left,position,fontSize'
             });
         }
     });
@@ -41,29 +44,35 @@ document.addEventListener('DOMContentLoaded', function() {
             autoAlpha: 1,
             scrollTrigger: {
                 trigger: line,
-                start: 'top center += 100',
-                end: 'bottom-top',
+                start: 'top bottom',
+                end: '+=500',
+                //pin: true,
                 scrub: true,
-                markers: true, 
-                toggleActions: 'play none none reverse'
+                markers: false, 
+                toggleActions: 'play reverse play reverse'
             }
           }
         );
     });
 
+    gsap.from('.decrepit-vector', { autoAlpha: 0, duration: 2, ease: 'power2.inOut' });
+
     ScrollTrigger.create({
-        trigger: '.vector-container',
-        start: 'top center',
-        end: 'bottom 30%',
+        trigger: '.decrepit-vector',
+        start: 'top top - 30px',
+        end: '+=500',
         scrub: true,
-        markers: true,
+        //pin: true,
+        markers: false,
+        toggleActions: 'play reverse play reverse',
         onEnter: () => {
             gsap.to('.vector-container img', {
-                duration: 1,
-                width: '100px', 
+                autoAlpha: 1,
+                duration: 3,
+                width: '75px', 
                 position: 'fixed',
-                top: '10px',
-                left: '50%',
+                top: '45px',
+                left: '5%',
                 transform: 'translateX(-50%)'
             });
         },
@@ -74,10 +83,33 @@ document.addEventListener('DOMContentLoaded', function() {
                 position: 'absolute',
                 top: '50%',
                 left: '50%',
-                transform: 'translate(-50%, -50%)'
+                transform: 'translate(-50%, -50%)',
+                clearProps: 'width,position,top,left,transform'
             });
         }
     });
+
+    gsap.from('#imageGalleryContainer', { autoAlpha: 0, opacity: 0, duration: 2, ease: 'power2.inOut' });
+
+    ScrollTrigger.create({
+        trigger: '#imageGalleryContainer',
+        start: 'top center',
+        end: 'bottom bottom',
+        scrub: true,
+        pin: '.pin',
+        markers: true,
+        onEnter: () => {
+            gsap.to('#imageGalleryContainer', {
+                autoAlpha: 1,
+                opacity: 1,
+                duration: 3,
+                ease: 'power2.inOut',
+                toggleActions: 'play reverse play reverse'
+            });
+        },
+    });
+
+
     const images = [
         {
             src: 'https://github.com/bellamoss77/PHT101-Final-Project-Gallery/blob/main/images/abandoned-hotel_1.png?raw=true',
@@ -1039,6 +1071,27 @@ document.addEventListener('DOMContentLoaded', function() {
         lightboxContent.appendChild(captionContainer);
         lightboxContainer.appendChild(lightboxContent);
 
+        const prevBtn = document.createElement('button');
+        prevBtn.classList.add('prev');
+        prevBtn.innerHTML = `<i class="fa-solid fa-angles-left"></i>`;
+
+        prevBtn.addEventListener('click', () => {
+            currentImageIndex = (currentImageIndex - 1 + images.length) % images.length;
+            openLightbox(currentImageIndex);
+        })
+
+        const nextBtn = document.createElement('button');
+        nextBtn.classList.add('next');
+        nextBtn.innerHTML = `<i class="fa-solid fa-angles-right"></i>`;
+
+        nextBtn.addEventListener('click', () => {
+            currentImageIndex = (currentImageIndex + 1) % images.length;
+            openLightbox(currentImageIndex)
+        })
+
+        lightboxContent.appendChild(prevBtn);
+        lightboxContent.appendChild(nextBtn);
+
         const likeBtn = document.createElement('button');
         likeBtn.innerHTML = `<svg id="MERGED_ICON" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 46.26 41" width="2rem" height="2rem">
         <defs>
@@ -1077,7 +1130,7 @@ document.addEventListener('DOMContentLoaded', function() {
         </g>
         <path id="HEART" class="cls-3" d="M22.76,8.25C12.57-3.29,2,3.36,2,14.32c0,9.98,20.76,24.26,20.76,24.26,0,0,21.5-14.67,21.5-25.24S30.96-3.29,22.76,8.25Z"/>
         </svg>`;
-        likeBtn.classList.add('like-btn');
+        likeBtn.classList.add('lightbox-like-btn');
 
         const svgElement = likeBtn.querySelector('svg');
         setSvgStyle(svgElement, image.liked ? 'active' : 'inactive');
