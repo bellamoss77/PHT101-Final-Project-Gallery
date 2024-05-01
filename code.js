@@ -1171,19 +1171,39 @@ document.addEventListener('DOMContentLoaded', function() {
             filteredImages = images.filter(img => img.location === filterValue);
         } else if (filterType === 'featured' && filterValue === 'true') {
             filteredImages = images.filter(img => img.featured);
+        } else if (filterType === 'category') {
+            filteredImages = images.filter(img => img.category === filterValue)
         }
+        console.log(`Found ${filteredImages.length} images`)
         displayImages(filteredImages);
+        updateActiveFilterDisplay(filterType, filterValue);
+    }
+
+    function updateActiveFilterDisplay(filterType, filterValue) {
+        const activeFilterDiv = document.getElementById('activeFilter');
+        activeFilterDiv.textContent = `${filterType}: ${filterValue}`;
+        activeFilterDiv.style.display = 'block';
     }
 
     function displayImages(imagesToDisplay) {
+        console.log(`Displaying ${imagesToDisplay.length} images`);
         const gallery = document.getElementById('imageGalleryContainer');
         gallery.innerHTML = '';
-        imagesToDisplay.forEach(image => {
+        imagesToDisplay.forEach((image, index) => {
+            const imgContent = document.createElement('div');
+            imgContent.classList.add('img-content');
+
             const imgElement = document.createElement('img');
+            imgElement.classList.add('filtered-imgs');
             imgElement.src = image.src;
             imgElement.alt = image.alt;
+            imgElement.classList.add('gallery-image');
+
+            imgContent.appendChild(imgElement);
             gallery.appendChild(imgElement)
-        })
+            console.log(`Added image ${image.id} to gallery`);
+        });
+        bindLightboxEvents();
     }
 
     images.forEach((image, index) => {
@@ -1287,7 +1307,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function openLightbox(index) {
         currentImageIndex = index;
-        const image = images[index];
+        const image = filteredImages.length > 0 ? filteredImages[index] : images[index];
         const lightboxContainer = document.getElementById('lightboxContainer');
         if (!lightboxContainer) {
             console.error('Lightbox container not found in DOM!');
@@ -1300,6 +1320,21 @@ document.addEventListener('DOMContentLoaded', function() {
         const lightboxContent = document.createElement('div');
         lightboxContent.className = 'lightbox-content';
 
+        let touchStartX = 0;
+        let touchEndX = 0;
+
+        function handleTouchMove(e) {
+            touchEndX = e.changedTouches[0].clientX;
+        };
+
+        function handleTouchEnd() {
+            if (touchEndX < touchStartX - 40) {
+                nextImage();
+            } else if (touchEndX > touchStartX + 40) {
+                previousImage();
+            }
+        }
+        
 
         const lightboxImg = document.createElement('img');
         lightboxImg.className = 'lightbox-img';
@@ -1406,6 +1441,18 @@ document.addEventListener('DOMContentLoaded', function() {
         };
         
         lightboxContent.appendChild(closeBtn);
+    }
+
+    function bindLightboxEvents() {
+        const galleryImages = document.querySelectorAll('.gallery-image');
+        galleryImages.forEach((img, index) => {
+            img.removeEventListener('click', handleImageClick);
+            img.addEventListener('click', () => handleImageClick(index));
+        });
+    }
+
+    function handleImageClick(index) {
+        openLightbox(index);
     }
 
     function updateLightboxContent(container, image) {

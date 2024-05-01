@@ -161,6 +161,17 @@ body, html {
   padding-bottom: 50vh;
 }
 
+#activeFilter {
+  position: fixed;
+  top: 40%;
+  left: 10px;
+  color: #ddd;
+  padding: 5px 10px;
+  border-radius: 5px;
+  font-size: 1.5rem;
+  font-weight: 400;
+}
+
 #filterButtonContainer {
   position: fixed;
   top: 20%;
@@ -179,9 +190,32 @@ body, html {
   border: 2px solid #ddd;
   cursor: pointer;
 }
+#filterButtonContainer .filter-section {
+  font-size: 1.2rem;
+  text-align: end;
+  padding-bottom: 0.5rem;
+}
 #filterButtonContainer .filter-options {
   display: none;
   background: rgb(175, 9, 177);
+}
+#filterButtonContainer .filter-options .filter-option {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  background: none;
+  background-color: none;
+  color: #ddd;
+  font-weight: 400;
+  outline: none;
+  border: none;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.filtered-imgs {
+  cursor: pointer;
 }
 
 #imageGalleryContainer {
