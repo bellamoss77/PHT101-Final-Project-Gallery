@@ -1154,7 +1154,7 @@ document.addEventListener('DOMContentLoaded', function() {
         start: 'top center',
         end: 'bottom bottom',
         toggleClass: {targets: filterContainer, className: 'fixed'},
-        markers: true
+        markers: false
     })
 
     filterButtons.forEach(button => {
