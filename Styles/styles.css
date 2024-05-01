@@ -173,6 +173,7 @@ body, html {
 }
 
 #filterButtonContainer {
+  z-index: 1000;
   position: fixed;
   top: 20%;
   right: -200px;
@@ -181,6 +182,7 @@ body, html {
   color: #ddd;
 }
 #filterButtonContainer #filterToggle {
+  z-index: 10000;
   background: none;
   background-color: none;
   padding: 0 1.5rem 0 0.5rem;
@@ -191,6 +193,7 @@ body, html {
   cursor: pointer;
 }
 #filterButtonContainer .filter-section {
+  z-index: 10000;
   font-size: 1.2rem;
   text-align: end;
   padding-bottom: 0.5rem;
@@ -198,6 +201,7 @@ body, html {
 #filterButtonContainer .filter-options {
   display: none;
   background: rgb(175, 9, 177);
+  padding: 1rem;
 }
 #filterButtonContainer .filter-options .filter-option {
   display: flex;
@@ -219,6 +223,7 @@ body, html {
 }
 
 #imageGalleryContainer {
+  z-index: 1;
   width: 95vw;
   margin: auto;
   display: flex;

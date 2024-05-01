@@ -192,6 +192,7 @@ body, html {
     background: none;
     color: $lightText;
     #filterToggle {
+        z-index: 10000;
         background: none;
         background-color: none;
         padding: 0 1.5rem 0 0.5rem;
@@ -202,6 +203,7 @@ body, html {
         cursor: pointer;
     }
     .filter-section {
+        z-index: 10000;
         font-size: 1.2rem;
         text-align: end;
         padding-bottom: 0.5rem;
@@ -209,6 +211,7 @@ body, html {
     .filter-options {
         display: none;
         background: $darkerPink;
+        padding: 1rem;
     
         .filter-option {
             @include flex(column, flex-start, flex-start);
@@ -229,6 +232,7 @@ body, html {
 }
 
 #imageGalleryContainer {
+    z-index: 1;
     width: 95vw;
     margin: auto;
     @include flex(row, center, center);
