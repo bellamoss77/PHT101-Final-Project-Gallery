@@ -1144,7 +1144,7 @@ document.addEventListener('DOMContentLoaded', function() {
             start: 'top center',
             toggleActions: 'play reverse play reverse'
         },
-        right: 15,
+        right: 10,
         duration: 1,
         ease: 'elastic'
     });
