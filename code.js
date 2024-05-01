@@ -1307,6 +1307,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function openLightbox(index) {
         currentImageIndex = index;
+        let filteredImages = [];
         const image = filteredImages.length > 0 ? filteredImages[index] : images[index];
         const lightboxContainer = document.getElementById('lightboxContainer');
         if (!lightboxContainer) {
@@ -1319,22 +1320,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
         const lightboxContent = document.createElement('div');
         lightboxContent.className = 'lightbox-content';
-
-        let touchStartX = 0;
-        let touchEndX = 0;
-
-        function handleTouchMove(e) {
-            touchEndX = e.changedTouches[0].clientX;
-        };
-
-        function handleTouchEnd() {
-            if (touchEndX < touchStartX - 40) {
-                nextImage();
-            } else if (touchEndX > touchStartX + 40) {
-                previousImage();
-            }
-        }
-        
 
         const lightboxImg = document.createElement('img');
         lightboxImg.className = 'lightbox-img';
