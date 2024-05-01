@@ -161,6 +161,29 @@ body, html {
   padding-bottom: 50vh;
 }
 
+#filterButtonContainer {
+  position: fixed;
+  top: 20%;
+  right: -200px;
+  width: 200px;
+  background: none;
+  color: #ddd;
+}
+#filterButtonContainer #filterToggle {
+  background: none;
+  background-color: none;
+  padding: 0 1.5rem 0 0.5rem;
+  border-radius: 10px;
+  font-size: 3rem;
+  color: #ddd;
+  border: 2px solid #ddd;
+  cursor: pointer;
+}
+#filterButtonContainer .filter-options {
+  display: none;
+  background: rgb(175, 9, 177);
+}
+
 #imageGalleryContainer {
   width: 95vw;
   margin: auto;

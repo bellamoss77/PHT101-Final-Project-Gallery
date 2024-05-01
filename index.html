@@ -67,6 +67,31 @@
     <div class="vector-container">
         <img src="images/dilapidated-vector.png" alt="decrepit buildings vector" width="800px" height="auto" class="decrepit-vector">
     </div>       
+    <div id="filterButtonContainer">
+        <button id="filterToggle">
+            <i class="fa-solid fa-filter"></i>
+        </button>
+        <div class="filter-options" style="display: none;">
+            <div class="filter-section">
+                <h4>Category</h4>
+                <button class="filter-option" data-filter="category" data-value="Abandoned Hotel">Abandoned Hotels</button>
+                <button class="filter-option" data-filter="category" data-value="Abandoned Restaurant">Abandoned Restaurant</button>
+                <button class="filter-option" data-filter="category" data-value="Abandoned Family Home">Abandoned Family Homes</button>
+                <button class="filter-option" data-filter="category" data-value="Historical Structures">Historical Structures</button>
+                <button class="filter-option" data-filter="category" data-value="Crumbling Structures">Crumbling Structures</button>
+            </div>
+            <div class="filter-section">
+                <h4>Location</h4>
+                <button class="filter-option" data-filter="location" data-value="Afton Mountain, VA">Afton Mountain, VA</button>
+                <button class="filter-option" data-filter="location" data-value="Albemarle County, VA">Albemarle County, VA</button>
+                <button class="filter-option" data-filter="location" data-value="Palmyra, VA">Palmyra, VA</button>
+            </div>
+            <div class="filter-section">
+                <h4>Featured</h4>
+                <button class="filter-option" data-filter="featured" data-value="true"></button>
+            </div>
+        </div>
+    </div>
     <div id="imageGalleryContainer"></div>
     <div id="lightboxContainer" class="lightbox hidden"></div>
 

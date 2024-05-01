@@ -172,6 +172,30 @@ body, html {
     }
 }
 
+#filterButtonContainer {
+    position: fixed;
+    top: 20%;
+    right: -200px;
+    width: 200px;
+    background: none;
+    color: $lightText;
+    #filterToggle {
+        background: none;
+        background-color: none;
+        padding: 0 1.5rem 0 0.5rem;
+        border-radius: 10px;
+        font-size: 3rem;
+        color: $lightText;
+        border: 2px solid $lightText;
+        cursor: pointer;
+    }
+    .filter-options {
+        display: none;
+        background: $darkerPink;
+    }
+    
+}
+
 #imageGalleryContainer {
     width: 95vw;
     margin: auto;
